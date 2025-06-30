@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sangjit Invitation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+  
+
+    .carousel-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height:75vh;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .carousel-slide {
+      display: flex;
+      width: 300%;
+      height: 60%;
+      transition: transform 1s ease-in-out;
+    }
+
+    .carousel-image {
+      width: 100vw;
+      height: 100%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .overlay-red-bg {
+     position: absolute;
+  top: calc(100vw * 270 / 390); /* same as carousel height */
+  
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - (100vw * 270 / 390)); /* fill remaining space */
+  background: url('img/bg.png') center/cover no-repeat;
+  z-index: 2;
+  pointer-events: none;
+    }
+
+    .text-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+   .text-overlay img {
+    margin-top:20vh;
+    max-width:70vw;
+    height: auto;
+    display: block;
+  }
+
+
+    .rsvp-button {
+      position: absolute;
+      min-width: 120px;
+      bottom: 6vh;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: white;
+      color: #8C1A1A;
+      font-weight: 600;
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      border-radius: 100px;
+      border: none;
+      z-index: 4;
+      cursor: pointer;
+    }
+
+   
+
+  @media screen and (min-width: 375px) and (max-width: 390px) and (max-height: 700px) {
+  /* iPhone SE tweaks */
+  .carousel-container {
+    width: 100vw;
+    height: 30vh;
+  }
+
+  .carousel-slide {
+    width: 300%;
+    height: 100%;
+  }
+
+  .carousel-image {
+    width: 100vw;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .overlay-red-bg {
+    position: fixed; /* ✅ always pinned behind everything */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('img/bg.png') center/cover no-repeat;
+    z-index: 0; /* ✅ behind everything else */
+    pointer-events: none;
+  }
+
+  .text-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    pointer-events: none;
+    
+  }
+
+  .text-overlay img {
+    margin-top:15vh;
+    max-width:65vw;
+    height: auto;
+    display: block;
+  }
+}
+
+@media screen and (min-width: 390px) and (max-width: 393px) and (min-height: 800px) {
+  /* iPhone 12/13/14 tweaks */
+  .carousel-container {
+    height: 68vh;
+  }
+
+  .text-overlay img {
+    margin-top:20vh;
+    max-width:78vw;
+    height: auto;
+    display: block;
+  }
+}
+
+@media screen and (min-width: 414px) and (max-width: 415px) and (min-height: 896px) and (max-height: 900px) {
+  .carousel-container {
+    height: 68vh;
+  }
+
+  .text-overlay img {
+    margin-top:20vh;
+    max-width:78vw;
+    height: auto;
+    display: block;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="carousel-container">
+    <div class="carousel-slide" id="carousel">
+      <img src="img/pic2.jpg" alt="Slide 1" class="carousel-image">
+      <img src="img/pic3.jpg" alt="Slide 2" class="carousel-image">
+      <img src="img/pic4.jpg" alt="Slide 3" class="carousel-image">
+    </div>
+  </div>
+
+  <div class="overlay-red-bg"></div>
+
+  <div class="text-overlay">
+    <img src="img/7.png" alt="Text Layer"/>
+  </div>
+
+  <a href="https://withjoy.com/natasya-and-nick/rsvp" target="_blank">
+    <button class="rsvp-button">RSVP</button>
+  </a>
+
+  <script>
+  const carousel = document.getElementById('carousel');
+  const slides = document.querySelectorAll('.carousel-image');
+  const totalSlides = slides.length;
+
+  // Clone the first slide and append it to the end
+  const firstClone = slides[0].cloneNode(true);
+  carousel.appendChild(firstClone);
+
+  let currentIndex = 0;
+
+  const slideWidth = 100; // vw
+
+  function moveSlide(index, animate = true) {
+    if (!animate) {
+      carousel.style.transition = 'none';
+    } else {
+      carousel.style.transition = 'transform 1s ease-in-out';
+    }
+
+    carousel.style.transform = `translateX(-${index * slideWidth}vw)`;
+  }
+
+  setInterval(() => {
+    currentIndex++;
+    moveSlide(currentIndex);
+
+    // When reaching the cloned slide, reset instantly
+    if (currentIndex === totalSlides) {
+      setTimeout(() => {
+        currentIndex = 0;
+        moveSlide(currentIndex, false);
+      }, 1000); // match transition duration
+    }
+  }, 4000);
+</script>
+</body>
+</html>
